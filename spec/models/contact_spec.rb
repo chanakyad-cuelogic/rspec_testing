@@ -57,6 +57,11 @@ describe "Contact" do
 				expect(Contact.by_letter("J")).to_not include @smith
 			end
 		end
+
+
+		it "has valid factory" do
+			expect(create(:contact)).to be_valid
+		end
 	end
 
 
