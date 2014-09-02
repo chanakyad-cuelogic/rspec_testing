@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe "Contact" do 
+
 	it	"is invalid without firstname lastname and email" do 
 		contact = Contact.new(firstname: "john",lastname: "dippy",email: "jdippy@hover.com")
 		expect(contact).to be_valid
@@ -20,9 +21,54 @@ describe "Contact" do
 		expect(contact).to have(1).errors_on(:email)
 	end
 
-	# it "is invalid without firstname"
-	# it "is invalid without lastname"
-	# it "is invalid without an email address"
-	# it "is invalid with a duplicate email address"
-	# it "returns a contact's full name as a string"
+	it "returns a contact full name as a string" do
+		contact = Contact.new(firstname: "john",lastname: "dippy",email: "jdippy@hover.com")
+		expect(contact.fullname).to eq 'john dippy'
+	end
+
+		it "sorts the lastname as per given input" do
+			smith = Contact.create(firstname: 'John', lastname: 'Smith',
+			email: 'jsmith@example.com')
+			jones = Contact.create(firstname: 'Tim', lastname: 'Jones',
+			email: 'tjones@example.com')
+			johnson = Contact.create(firstname: 'John', lastname: 'Johnson',
+			email: 'jjohnson@example.com')
+			# expect(Contact.by_letter("J")).to eq [johnson, jones]
+			expect(Contact.by_letter("J")).to_not include smith
+		end
+
+	describe "filter last name by letter" do 
+		before :each do
+			@smith = Contact.create(firstname: 'John', lastname: 'Smith',
+			email: 'jsmith@example.com')
+			@jones = Contact.create(firstname: 'Tim', lastname: 'Jones',
+			email: 'tjones@example.com')
+			@johnson = Contact.create(firstname: 'John', lastname: 'Johnson',
+			email: 'jjohnson@example.com')
+		end
+		context "matching letters " do
+			it "returns the matching lastname with the given letters" do
+				expect(Contact.by_letter("J")).to eq [@johnson, @jones]				
+			end
+		end
+
+		context "matching letters" do
+			it "returns the matching lastname with the given letters" do
+				expect(Contact.by_letter("J")).to_not include @smith
+			end
+		end
+	end
+
+
+
+		# it "returns a sorted array of results that match" do
+		# 	smith = Contact.create(firstname: 'John', lastname: 'Smith',
+		# 	email: 'jsmith@example.com')
+		# 	jones = Contact.create(firstname: 'Tim', lastname: 'Jones',
+		# 	email: 'tjones@example.com')
+		# 	johnson = Contact.create(firstname: 'John', lastname: 'Johnson',
+		# 	email: 'jjohnson@example.com')
+		# 	expect(Contact.by_letter("J")).to eq [johnson, jones]
+		# end
+
 end
